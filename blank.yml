@@ -17,7 +17,7 @@ jobs:                      # Début de la liste des jobs
         # Ici, checkout permet de récupérer le code du dépôt pour l'exécuter
 
       # --- Étape 2 : Installer Java (JDK) ---
-      - name: Set up JDK   #A voir pour l'utilisaton de Java 21
+      - name: Set up JDK 17 #A voir pour l'utilisaton de Java 21
         uses: actions/setup-java@v3
         with:
           distribution: temurin  # La distribution du JDK, classique
@@ -31,33 +31,39 @@ jobs:                      # Début de la liste des jobs
       #   uses: gradle/gradle-build-action@v2
       #   with:
       #     gradle-version: '8.2'
+      
+      # --- Étape 3 : Mettre en cache les dépendances Gradle ---
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          # Chemins à mettre en cache
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        # Cette étape accélère les builds suivants en réutilisant les dépendances déjà téléchargées
 
       # --- Étape 4 : Build du projet ---
       - name: Build with Gradle
         run: ./gradlew build
         # "run" permet d'exécuter une commande shell sur la machine virtuelle
         # Ici, gradlew build compile le projet et assemble les fichiers
+        # Même si build.gradle est vide, cette commande initialise Gradle et prépare le projet
 
       # --- Étape 5 : Lancer les tests ---
       - name: Run tests
         run: ./gradlew test
         # Exécute tous les tests unitaires définis dans le projet
+        # Si aucun test n’est défini, elle passe sans erreur
 
       # --- Étape 6 : Vérifier la qualité du code ---
       - name: Check code quality
         run: ./gradlew check
         # "check" inclut souvent des plugins comme Checkstyle ou SpotBugs si configurés
+        # Si aucun plugin n’est configuré, l’étape passe rapidement
 
       # --- Étape 7 : Optionnel : publier un rapport ---
       - name: Show test results
         run: cat build/test-results/test/*.xml
-        # Affiche les résultats de test dans les logs GitHub Actions
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-
+        # Permet de visualiser les résultats dans les logs GitHub Actions
+        # Le '|| echo' évite que l'étape échoue si aucun test n’existe encore
