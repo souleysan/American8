@@ -24,7 +24,7 @@ jobs:                      # Début de la liste des jobs
           java-version: '17'    # La version Java à utiliser
         # Cela installe Java sur la machine virtuelle pour que Gradle puisse fonctionner
 
-      # --- Étape 3 : Installer Gradle (optionnel si tu as le wrapper) ---
+      # --- Étape 2bis : Installer Gradle (optionnel si tu as le wrapper) ---
       # Si tu as le wrapper Gradle (gradlew), tu peux sauter cette étape
       # Sinon tu peux installer Gradle via une action
       # - name: Setup Gradle

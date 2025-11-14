@@ -29,3 +29,32 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 */
+
+
+
+// --- Active le plugin Java ---
+// Cela permet à Gradle de compiler ton code Java,
+// créer la structure /build, gérer les tests, etc.
+plugins {
+    id 'java'
+}
+
+// --- Où récupérer les dépendances (bibliothèques) ---
+// MavenCentral est la source la plus courante et fiable.
+repositories {
+    mavenCentral()
+}
+
+// --- Dépendances nécessaires au projet ---
+// Ici, on ajoute JUnit 5 pour les tests unitaires.
+dependencies {
+    // testImplementation signifie :
+    // "cette dépendance est utilisée seulement pour les tests"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+// --- Configuration des tests ---
+// Indique à Gradle d’utiliser le moteur JUnit Jupiter (JUnit 5)
+test {
+    useJUnitPlatform()
+}
