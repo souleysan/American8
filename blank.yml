@@ -1,4 +1,4 @@
-name: Java Gradle CI       # Nom du workflow (apparaît dans GitHub Actions)
+name: American8       # Nom du workflow (apparaît dans GitHub Actions)
 
 # Déclencheurs du workflow - mot clé "on"
 on:
